@@ -73,14 +73,18 @@
             <h2 class="text-lg font-bold text-slate-100 mb-2">💎 Quase lá!</h2>
             <p class="text-xs text-slate-400 mb-4">Faça um PIX de **R$ 1,99** para liberar mais de 50 modelos de IA imediatamente.</p>
             
-            <!-- Área da Chave PIX -->
+            <!-- Área da Chave PIX (Apenas números para o Copia e Cola funcionar) -->
             <div class="bg-slate-950 border border-slate-800 p-3 rounded-xl mb-4 text-xs font-mono text-amber-400 break-all select-all flex justify-between items-center gap-2">
-                <!-- ATENÇÃO: SUBSTITUA O TEXTO ABAIXO PELA SUA CHAVE PIX REAL (EX: SEU EMAIL, CELULAR OU CHAVE ALEATÓRIA) -->
-                <span id="chave-pix">cpf14593353840</span>
+                <span id="chave-pix">14593353840</span>
                 <button onclick="copiarChavePix()" id="btn-copiar-pix" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-2 py-1 rounded text-[10px] transition-colors">Copiar</button>
             </div>
 
-            <p class="text-[10px] text-slate-500 mb-5">Após o pagamento, envie o comprovante para o nosso suporte para liberação instantânea.</p>
+            <p class="text-[10px] text-slate-500 mb-4">Após realizar o PIX, clique no botão abaixo para enviar o comprovante.</p>
+            
+            <!-- BOTÃO DO WHATSAPP TOTALMENTE CONFIGURADO COM SEU NÚMERO -->
+            <a href="https://wa.me! Fiz o PIX de R$ 1,99. Aqui está o comprovante para liberar meus 50 modelos do Copia %26 Cola Pro." target="_blank" class="block w-full bg-green-600 hover:bg-green-500 text-white font-bold py-2.5 rounded-lg text-xs transition-all active:scale-[0.98] mb-4 flex items-center justify-center gap-2">
+                🟢 Enviar Comprovante no WhatsApp
+            </a>
             
             <button onclick="fecharModalPix()" class="text-xs text-slate-400 hover:text-slate-300 underline cursor-pointer">
                 Fechar Janela
@@ -88,7 +92,7 @@
         </div>
     </div>
 
-    <p class="text-[11px] text-slate-600 mt-6 font-mono">v1.1.0 • Pagamento Seguro via PIX</p>
+    <p class="text-[11px] text-slate-600 mt-6 font-mono">v1.2.0 • Pagamento Seguro via PIX</p>
 
     <script>
         const bancoDeMensagens = {
@@ -112,7 +116,6 @@
             });
         }
 
-        // Funções da Janela do PIX
         function abrirModalPix() { document.getElementById('modal-pix').classList.remove('hidden'); }
         function fecharModalPix() { document.getElementById('modal-pix').classList.add('hidden'); }
         
