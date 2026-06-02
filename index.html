@@ -7,7 +7,6 @@
     <!-- Tailwind CSS para design premium, leve e responsivo em celulares -->
     <script src="https://jsdelivr.net"></script>
     <style>
-        /* Animação suave para quando o texto aparecer */
         .fade-in { animation: fadeIn 0.4s ease-out forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -45,7 +44,7 @@
             </button>
         </div>
 
-        <!-- Bloco de Resultado (Oculto Inicialmente) -->
+        <!-- Bloco de Resultado -->
         <div id="resultado-box" class="mt-6 hidden border-t border-slate-800 pt-5 fade-in">
             <div class="flex justify-between items-center mb-2">
                 <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400">Mensagem Pronta:</label>
@@ -54,28 +53,44 @@
                 </button>
             </div>
             
-            <!-- Caixa de Texto -->
-            <div id="texto-gerado" class="bg-slate-950 p-4 rounded-xl text-sm border border-slate-850 whitespace-pre-line text-slate-300 leading-relaxed font-mono"></div>
+            <div id="texto-gerado" class="bg-slate-950 p-4 rounded-xl text-sm border border-slate-850 whitespace-pre-line text-slate-300 leading-relaxed font-mono mb-4"></div>
             
-            <!-- Gatilho de Monetização Real -->
-            <div class="mt-5 bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20 p-4 rounded-xl text-center">
+            <!-- Bloco de Monetização com PIX -->
+            <div class="bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20 p-4 rounded-xl text-center">
                 <span class="inline-block bg-amber-500 text-slate-950 text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full mb-2">Acesso Premium</span>
                 <p class="text-xs text-slate-300 mb-3">Gostou? Desbloqueie o gerador com **+50 modelos avançados de IA**.</p>
                 
-                <!-- IMPORTANTE: Substitua a URL abaixo pelo seu link do Stripe Checkout ou remova se for usar chave PIX na tela -->
-                <a href="https://stripe.com" target="_blank" class="block w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold py-2.5 rounded-lg text-xs transition-all active:scale-[0.98]">
+                <button onclick="abrirModalPix()" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold py-2.5 rounded-lg text-xs transition-all active:scale-[0.98] cursor-pointer">
                     Desbloquear Versão Ilimitada (R$ 1,99)
-                </a>
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- Rodapé Discreto -->
-    <p class="text-[11px] text-slate-600 mt-6 font-mono">v1.0.0 • Hospedagem Segura em Nuvem</p>
+    <!-- Janela Flutuante do PIX (Modal) -->
+    <div id="modal-pix" class="fixed inset-0 bg-black/70 flex justify-center items-center p-4 hidden fade-in z-50">
+        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl max-w-sm w-full text-center relative">
+            <h2 class="text-lg font-bold text-slate-100 mb-2">💎 Quase lá!</h2>
+            <p class="text-xs text-slate-400 mb-4">Faça um PIX de **R$ 1,99** para liberar mais de 50 modelos de IA imediatamente.</p>
+            
+            <!-- Área da Chave PIX -->
+            <div class="bg-slate-950 border border-slate-800 p-3 rounded-xl mb-4 text-xs font-mono text-amber-400 break-all select-all flex justify-between items-center gap-2">
+                <!-- ATENÇÃO: SUBSTITUA O TEXTO ABAIXO PELA SUA CHAVE PIX REAL (EX: SEU EMAIL, CELULAR OU CHAVE ALEATÓRIA) -->
+                <span id="chave-pix">SUA_CHAVE_PIX_AQUI</span>
+                <button onclick="copiarChavePix()" id="btn-copiar-pix" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-2 py-1 rounded text-[10px] transition-colors">Copiar</button>
+            </div>
 
-    <!-- Banco de Dados e Lógica do Sistema -->
+            <p class="text-[10px] text-slate-500 mb-5">Após o pagamento, envie o comprovante para o nosso suporte para liberação instantânea.</p>
+            
+            <button onclick="fecharModalPix()" class="text-xs text-slate-400 hover:text-slate-300 underline cursor-pointer">
+                Fechar Janela
+            </button>
+        </div>
+    </div>
+
+    <p class="text-[11px] text-slate-600 mt-6 font-mono">v1.1.0 • Pagamento Seguro via PIX</p>
+
     <script>
-        // Banco de dados em memória contendo as strings que geram o valor
         const bancoDeMensagens = {
             venda: "🔥 Fala comigo! Vi que você se interessou pela nossa automação de renda passiva.\n\nPreparamos uma demonstração 100% gratuita para você entender a arquitetura do sistema rodando na nuvem. Quer receber o link de acesso agora no seu privado?",
             cobranca: "Olá! Tudo bem?\n\nPassando de forma rápida apenas para te avisar que o sistema identificou que a sua licença de uso expira nas próximas horas. Para não pausar o recebimento dos seus centavos no automático, recomendo atualizar o saldo por aqui.",
@@ -83,29 +98,30 @@
             suporte: "Opa! Analisei os logs do seu sistema e o comportamento está normal.\n\nEsse pequeno atraso acontece quando o servidor gratuito recebe muitos acessos simultâneos, mas a nossa tolerância a falhas já corrigiu o fluxo. Pode testar novamente!"
         };
 
-        // Função executada ao clicar no botão
         function gerarTexto() {
-            const tipoSelecionado = document.getElementById('tipo').value;
-            const caixaTexto = document.getElementById('texto-gerado');
-            const containerResultado = document.getElementById('resultado-box');
-
-            // Insere o texto dinamicamente baseado na escolha
-            caixaTexto.innerText = bancoDeMensagens[tipoSelecionado];
-            
-            // Torna a caixa visível na tela
-            containerResultado.classList.remove('hidden');
-            
-            // Reseta o botão de copiar caso tenha sido usado antes
+            document.getElementById('texto-gerado').innerText = bancoDeMensagens[document.getElementById('tipo').value];
+            document.getElementById('resultado-box').classList.remove('hidden');
             document.getElementById('btn-copiar').innerText = "Copiar Texto";
         }
 
-        // Função auxiliar para melhorar a experiência do usuário
         function copiarTexto() {
-            const texto = document.getElementById('texto-gerado').innerText;
-            navigator.clipboard.writeText(texto).then(() => {
+            navigator.clipboard.writeText(document.getElementById('texto-gerado').innerText).then(() => {
                 const btn = document.getElementById('btn-copiar');
                 btn.innerHTML = "✨ Copiado!";
                 setTimeout(() => { btn.innerText = "Copiar Texto"; }, 2000);
+            });
+        }
+
+        // Funções da Janela do PIX
+        function abrirModalPix() { document.getElementById('modal-pix').classList.remove('hidden'); }
+        function fecharModalPix() { document.getElementById('modal-pix').classList.add('hidden'); }
+        
+        function copiarChavePix() {
+            const chave = document.getElementById('chave-pix').innerText;
+            navigator.clipboard.writeText(chave).then(() => {
+                const btn = document.getElementById('btn-copiar-pix');
+                btn.innerText = "Copiado!";
+                setTimeout(() => { btn.innerText = "Copiar"; }, 2000);
             });
         }
     </script>
