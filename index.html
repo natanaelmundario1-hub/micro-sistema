@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Mensagens Instantâneo</title>
+    <!-- Tailwind CSS para design moderno e leve -->
+    <script src="https://jsdelivr.net"></script>
+</head>
+<body class="bg-gray-900 text-gray-100 flex flex-col min-height-screen justify-center items-center p-4">
+
+    <div class="w-full max-w-md bg-gray-800 p-6 rounded-2xl shadow-xl border border-gray-700">
+        <!-- Título Chamativo -->
+        <h1 class="text-2xl font-bold text-center text-blue-400 mb-2">⚡ Copiar & Colar</h1>
+        <p class="text-sm text-gray-400 text-center mb-6">Gere mensagens profissionais em segundos sem digitar nada.</p>
+
+        <!-- Formulário da Ferramenta -->
+        <div class="space-y-4">
+            <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Tipo de Mensagem</label>
+                <select id="tipo" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-2.5 text-sm focus:outline-none focus:border-blue-500">
+                    <option value="venda">Oferta Irrecusável (Vendas)</option>
+                    <option value="cobranca">Cobrança Amigável</option>
+                    <option value="boasvindas">Boas-vindas ao Cliente</option>
+                </select>
+            </div>
+
+            <button onclick="gerarTexto()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 rounded-lg text-sm transition-colors cursor-pointer">
+                Gerar Mensagem Grátis
+            </button>
+        </div>
+
+        <!-- Área de Resultado -->
+        <div id="resultado-box" class="mt-6 hidden">
+            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Sua Mensagem Pronta:</label>
+            <div id="texto-gerado" class="bg-gray-950 p-3 rounded-lg text-sm border border-gray-700 whitespace-pre-line text-gray-300"></div>
+            
+            <!-- Botão de Monetização (Stripe Link ou Chave Pix Automática) -->
+            <a href="https://stripe.com" target="_blank" class="block text-center mt-4 bg-amber-500 hover:bg-amber-400 text-gray-900 font-bold py-2 rounded-lg text-xs transition-colors">
+                👑 Desbloquear Versão Premium sem Limites (R$ 1,99)
+            </a>
+        </div>
+    </div>
+
+    <!-- Lógica de Funcionamento Automatizada -->
+    <script>
+        function gerarTexto() {
+            const tipo = document.getElementById('tipo').value;
+            const textoBox = document.getElementById('texto-gerado');
+            const resultadoBox = document.getElementById('resultado-box');
+            
+            let mensagens = {
+                venda: "🔥 Opa! Vi que você tem interesse em escalar seu negócio. Liberei uma ferramenta que automatiza seus ganhos na nuvem rodando 24h. Quer testar o acesso gratuito hoje?",
+                cobranca: "Olá! Passando apenas para lembrar que o link de fechamento do seu sistema expira hoje. Para não perder o histórico de dados, basta confirmar o envio.",
+                boasvindas: "Seja muito bem-vindo! Seu bot de automação já foi configurado na nuvem e está pronto para rodar. Clique no painel para iniciar."
+            };
+
+            textoBox.innerText = mensagens[tipo];
+            resultadoBox.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
