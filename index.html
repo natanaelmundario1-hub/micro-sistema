@@ -4,59 +4,109 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerador de Mensagens Instantâneo</title>
-    <!-- Tailwind CSS para design moderno e leve -->
+    <!-- Tailwind CSS para design premium, leve e responsivo em celulares -->
     <script src="https://jsdelivr.net"></script>
+    <style>
+        /* Animação suave para quando o texto aparecer */
+        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
 </head>
-<body class="bg-gray-900 text-gray-100 flex flex-col min-height-screen justify-center items-center p-4">
+<body class="bg-slate-950 text-slate-100 flex flex-col min-h-screen justify-center items-center p-4 font-sans select-none">
 
-    <div class="w-full max-w-md bg-gray-800 p-6 rounded-2xl shadow-xl border border-gray-700">
-        <!-- Título Chamativo -->
-        <h1 class="text-2xl font-bold text-center text-blue-400 mb-2">⚡ Copiar & Colar</h1>
-        <p class="text-sm text-gray-400 text-center mb-6">Gere mensagens profissionais em segundos sem digitar nada.</p>
+    <!-- Container Principal -->
+    <div class="w-full max-w-md bg-slate-900 p-6 rounded-2xl shadow-2xl border border-slate-800 transition-all duration-300">
+        
+        <!-- Cabeçalho -->
+        <div class="flex flex-col items-center mb-6">
+            <div class="bg-blue-500/10 p-3 rounded-full text-blue-400 mb-3 border border-blue-500/20">
+                <svg xmlns="http://w3.org" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+            </div>
+            <h1 class="text-2xl font-bold text-slate-100 tracking-tight">Copia & Cola Pro</h1>
+            <p class="text-xs text-slate-400 mt-1 text-center">Gere mensagens de alta conversão sem precisar digitar.</p>
+        </div>
 
-        <!-- Formulário da Ferramenta -->
+        <!-- Formulário -->
         <div class="space-y-4">
             <div>
-                <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Tipo de Mensagem</label>
-                <select id="tipo" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-2.5 text-sm focus:outline-none focus:border-blue-500">
-                    <option value="venda">Oferta Irrecusável (Vendas)</option>
-                    <option value="cobranca">Cobrança Amigável</option>
-                    <option value="boasvindas">Boas-vindas ao Cliente</option>
+                <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Escolha o objetivo:</label>
+                <select id="tipo" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-slate-200 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all cursor-pointer">
+                    <option value="venda">🔥 Oferta Irrecusável (Vendas)</option>
+                    <option value="cobranca">💰 Cobrança Inteligente (Sem Chateação)</option>
+                    <option value="boasvindas">👋 Boas-vindas ao Novo Cliente</option>
+                    <option value="suporte">🛠️ Script de Suporte Rápido</option>
                 </select>
             </div>
 
-            <button onclick="gerarTexto()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 rounded-lg text-sm transition-colors cursor-pointer">
-                Gerar Mensagem Grátis
+            <button onclick="gerarTexto()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-3 rounded-xl text-sm transition-all duration-200 active:scale-[0.98] shadow-lg shadow-blue-600/20 cursor-pointer">
+                Gerar Texto no Automático
             </button>
         </div>
 
-        <!-- Área de Resultado -->
-        <div id="resultado-box" class="mt-6 hidden">
-            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Sua Mensagem Pronta:</label>
-            <div id="texto-gerado" class="bg-gray-950 p-3 rounded-lg text-sm border border-gray-700 whitespace-pre-line text-gray-300"></div>
+        <!-- Bloco de Resultado (Oculto Inicialmente) -->
+        <div id="resultado-box" class="mt-6 hidden border-t border-slate-800 pt-5 fade-in">
+            <div class="flex justify-between items-center mb-2">
+                <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400">Mensagem Pronta:</label>
+                <button onclick="copiarTexto()" id="btn-copiar" class="text-xs text-blue-400 hover:text-blue-300 font-medium transition-colors cursor-pointer flex items-center gap-1">
+                    Copiar Texto
+                </button>
+            </div>
             
-            <!-- Botão de Monetização (Stripe Link ou Chave Pix Automática) -->
-            <a href="https://stripe.com" target="_blank" class="block text-center mt-4 bg-amber-500 hover:bg-amber-400 text-gray-900 font-bold py-2 rounded-lg text-xs transition-colors">
-                👑 Desbloquear Versão Premium sem Limites (R$ 1,99)
-            </a>
+            <!-- Caixa de Texto -->
+            <div id="texto-gerado" class="bg-slate-950 p-4 rounded-xl text-sm border border-slate-850 whitespace-pre-line text-slate-300 leading-relaxed font-mono"></div>
+            
+            <!-- Gatilho de Monetização Real -->
+            <div class="mt-5 bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20 p-4 rounded-xl text-center">
+                <span class="inline-block bg-amber-500 text-slate-950 text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full mb-2">Acesso Premium</span>
+                <p class="text-xs text-slate-300 mb-3">Gostou? Desbloqueie o gerador com **+50 modelos avançados de IA**.</p>
+                
+                <!-- IMPORTANTE: Substitua a URL abaixo pelo seu link do Stripe Checkout ou remova se for usar chave PIX na tela -->
+                <a href="https://stripe.com" target="_blank" class="block w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold py-2.5 rounded-lg text-xs transition-all active:scale-[0.98]">
+                    Desbloquear Versão Ilimitada (R$ 1,99)
+                </a>
+            </div>
         </div>
     </div>
 
-    <!-- Lógica de Funcionamento Automatizada -->
-    <script>
-        function gerarTexto() {
-            const tipo = document.getElementById('tipo').value;
-            const textoBox = document.getElementById('texto-gerado');
-            const resultadoBox = document.getElementById('resultado-box');
-            
-            let mensagens = {
-                venda: "🔥 Opa! Vi que você tem interesse em escalar seu negócio. Liberei uma ferramenta que automatiza seus ganhos na nuvem rodando 24h. Quer testar o acesso gratuito hoje?",
-                cobranca: "Olá! Passando apenas para lembrar que o link de fechamento do seu sistema expira hoje. Para não perder o histórico de dados, basta confirmar o envio.",
-                boasvindas: "Seja muito bem-vindo! Seu bot de automação já foi configurado na nuvem e está pronto para rodar. Clique no painel para iniciar."
-            };
+    <!-- Rodapé Discreto -->
+    <p class="text-[11px] text-slate-600 mt-6 font-mono">v1.0.0 • Hospedagem Segura em Nuvem</p>
 
-            textoBox.innerText = mensagens[tipo];
-            resultadoBox.classList.remove('hidden');
+    <!-- Banco de Dados e Lógica do Sistema -->
+    <script>
+        // Banco de dados em memória contendo as strings que geram o valor
+        const bancoDeMensagens = {
+            venda: "🔥 Fala comigo! Vi que você se interessou pela nossa automação de renda passiva.\n\nPreparamos uma demonstração 100% gratuita para você entender a arquitetura do sistema rodando na nuvem. Quer receber o link de acesso agora no seu privado?",
+            cobranca: "Olá! Tudo bem?\n\nPassando de forma rápida apenas para te avisar que o sistema identificou que a sua licença de uso expira nas próximas horas. Para não pausar o recebimento dos seus centavos no automático, recomendo atualizar o saldo por aqui.",
+            boasvindas: "Seja muito bem-vindo ao time! 🚀\n\nSua chave de acesso ao microssistema já foi validada com sucesso. O script já está rodando em nossos servidores e você não precisa deixar nada ligado na tomada. Qualquer dúvida, basta chamar!",
+            suporte: "Opa! Analisei os logs do seu sistema e o comportamento está normal.\n\nEsse pequeno atraso acontece quando o servidor gratuito recebe muitos acessos simultâneos, mas a nossa tolerância a falhas já corrigiu o fluxo. Pode testar novamente!"
+        };
+
+        // Função executada ao clicar no botão
+        function gerarTexto() {
+            const tipoSelecionado = document.getElementById('tipo').value;
+            const caixaTexto = document.getElementById('texto-gerado');
+            const containerResultado = document.getElementById('resultado-box');
+
+            // Insere o texto dinamicamente baseado na escolha
+            caixaTexto.innerText = bancoDeMensagens[tipoSelecionado];
+            
+            // Torna a caixa visível na tela
+            containerResultado.classList.remove('hidden');
+            
+            // Reseta o botão de copiar caso tenha sido usado antes
+            document.getElementById('btn-copiar').innerText = "Copiar Texto";
+        }
+
+        // Função auxiliar para melhorar a experiência do usuário
+        function copiarTexto() {
+            const texto = document.getElementById('texto-gerado').innerText;
+            navigator.clipboard.writeText(texto).then(() => {
+                const btn = document.getElementById('btn-copiar');
+                btn.innerHTML = "✨ Copiado!";
+                setTimeout(() => { btn.innerText = "Copiar Texto"; }, 2000);
+            });
         }
     </script>
 </body>
